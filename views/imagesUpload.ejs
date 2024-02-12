@@ -1,0 +1,44 @@
+<%- include('partials/header'); -%>
+
+<form action="/imagesUpload">
+    <h2>Upload Image</h2>
+    <input type="file" name="image" accept="image/jpeg, image/png, image/gif" required>
+    <input type="hidden" name="user" value="<%= user._id %>">
+    <button type="submit">Submit</button>
+</form>
+
+<div style="margin-top:10%; margin-left:40%">
+<a href="/imagesFetch" class="btn">View Uploaded Images</a>
+</div>
+
+<%- include('partials/footer'); -%>
+
+<script>
+    const form = document.querySelector('form');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch('/imagesUpload', {
+              enctype : "multipart/form-data",  
+              method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                console.log('Image uploaded successfully');
+                alert('Image uploaded successfully');
+                // Handle success (e.g., display success message)
+            } else {
+                const errorMessage = await response.text();
+                console.error('Error:', errorMessage);
+                // Handle error
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle network error
+        }
+    });
+</script>
